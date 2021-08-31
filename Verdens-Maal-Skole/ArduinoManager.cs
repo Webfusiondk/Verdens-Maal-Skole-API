@@ -10,7 +10,7 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static string connectionString = "";
+        static string connectionString = @"(localdb)\MSSQLLOCALDB";
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient client = new HttpClient();
@@ -47,7 +47,7 @@ namespace Verdens_Maal_Skole
                     Task<string[]> task = GetCelciusAsync();
                     if (task.Result.Length == 3)
                     {
-                        ConvertStringToFloat(task);
+                        PostToDataBase(ConvertStringToFloat(task));
                     }
                     isDone = true;
                 }
@@ -65,26 +65,28 @@ namespace Verdens_Maal_Skole
             float[] temp = new float[3];
             for (int i = 0; i < data.Result.Length; i++)
             {
-                temp[i] = float.Parse(data.Result[i],ci);
+                temp[i] = float.Parse(data.Result[i], ci);
             }
             return temp;
         }
         private void PostToDataBase(float[] arrya)
         {
             using (var connection = new SqlConnection(connectionString))
-            using (var command = connection.CreateCommand())
             {
-                connection.Open();
-                command.CommandText = @"insert into Light([read]) values (@light);
+                using (var command = connection.CreateCommand())
+                {
+                    connection.Open();
+                    command.CommandText = @"insert into Light([read]) values (@light);
                                     insert into Tempature([read]) values (@tempature);
                                     insert into Humidity([read]) values (@humididty);";
-                command.Parameters.AddWithValue("@humididty",arrya[1]);
-                command.Parameters.AddWithValue("@tempature",arrya[2]);
-                command.Parameters.AddWithValue("@light",arrya[3]);
-                command.ExecuteNonQuery();
-            };
+                    command.Parameters.AddWithValue("@humididty", arrya[1]);
+                    command.Parameters.AddWithValue("@tempature", arrya[2]);
+                    command.Parameters.AddWithValue("@light", arrya[3]);
+                    command.ExecuteNonQuery();
+                };
+            }
         }
-            public void StartEventTimer()
+        public void StartEventTimer()
         {
             aTimer = new Timer();
             aTimer.Interval = 2000;
