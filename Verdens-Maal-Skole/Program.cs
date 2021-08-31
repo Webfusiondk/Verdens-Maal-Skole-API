@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Verdens_Maal_Skole
 {
     public class Program
     {
+        static ArduinoManager manager = new ArduinoManager();
         public static void Main(string[] args)
         {
+            manager.StartEventTimer();
             CreateHostBuilder(args).Build().Run();
         }
 
