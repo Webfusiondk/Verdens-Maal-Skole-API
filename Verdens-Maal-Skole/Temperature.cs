@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Verdens_Maal_Skole
 {
-    public class Celsius : ReaderData
+    public class Temperature : ReaderData
     {
-        public Celsius(float value, DateTime time)
+        public Temperature(float value, DateTime time)
         {
             Value = value;
             Time = time;

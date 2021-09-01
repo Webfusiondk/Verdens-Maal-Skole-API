@@ -7,7 +7,7 @@ namespace Verdens_Maal_Skole
 {
     public class Light : ReaderData
     {
-        public Light(string description, float value,DateTime time)
+        public Light(string description, int value, DateTime time)
         {
             Time = time;
             Value = value;
