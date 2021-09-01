@@ -10,32 +10,35 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static string connectionString = @"(localdb)\MSSQLLOCALDB";
+        static string connectionString = @"Server = (localdb)\MSSQLLOCALDB; Database = ArduinoDB"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
         static bool isDone = true;
         private static Timer aTimer;
-        static readonly HttpClient client = new HttpClient();
-        public async Task<string[]> GetCelciusAsync()
+        static readonly HttpClient _client = new HttpClient();
+
+        public async Task<string[]> GetDataAsync()
         {
             try
             {
                 //Sending http request to website
-                HttpResponseMessage respons = await client.GetAsync(@"http://192.168.1.114/");
+                HttpResponseMessage respons = await _client.GetAsync(@"http://192.168.1.132/"); //MAKE SURE TO CHECK FOR UPDATED ARDUINO IP
                 respons.EnsureSuccessStatusCode();
                 //Reading the response from website
                 string responsBody = await respons.Content.ReadAsStringAsync();
 
                 //Writing the response and replacing all HTML to text "Removed"
                 string regString = Regex.Replace(responsBody, "<[^>]*>", "Removed");
-                //Spliting the streng at ;
+                //Spliting the string at ';'
                 string[] tempValues = regString.Split(";");
                 return tempValues;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("ERROR: " + ex.Message);
                 throw;
             }
         }
+
+
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             try
@@ -44,20 +47,24 @@ namespace Verdens_Maal_Skole
                 if (isDone == true)
                 {
                     isDone = false;
-                    Task<string[]> task = GetCelciusAsync();
+
+                    Task<string[]> task = GetDataAsync();
+
                     if (task.Result.Length == 3)
                     {
-                        PostToDataBase(ConvertStringToFloat(task));
+                        PostToDatabase(ConvertStringToFloat(task));
                     }
+
                     isDone = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Console.WriteLine("ERROR: " + ex.Message);
             }
         }
+
+
         private float[] ConvertStringToFloat(Task<string[]> data)
         {
             var ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
@@ -69,23 +76,33 @@ namespace Verdens_Maal_Skole
             }
             return temp;
         }
-        private void PostToDataBase(float[] arrya)
+
+
+        private void PostToDatabase(float[] array)
         {
             using (var connection = new SqlConnection(connectionString))
             {
+                connection.Open();
+
                 using (var command = connection.CreateCommand())
                 {
-                    connection.Open();
-                    command.CommandText = @"insert into Light([read]) values (@light);
-                                    insert into Tempature([read]) values (@tempature);
-                                    insert into Humidity([read]) values (@humididty);";
-                    command.Parameters.AddWithValue("@humididty", arrya[1]);
-                    command.Parameters.AddWithValue("@tempature", arrya[2]);
-                    command.Parameters.AddWithValue("@light", arrya[3]);
+                    command.CommandText = 
+                    @"INSERT INTO Light([Read]) VALUES (@light);
+                    INSERT INTO Temperature([Read]) VALUES (@Temperature);
+                    INSERT INTO [Humidity]([Read]) VALUES (@humidity);";
+
+                    command.Parameters.AddWithValue("@humidity", array[0]);
+                    command.Parameters.AddWithValue("@Temperature", array[1]);
+                    command.Parameters.AddWithValue("@light", array[2]);
+
                     command.ExecuteNonQuery();
                 };
+
+                connection.Close();
             }
         }
+
+
         public void StartEventTimer()
         {
             aTimer = new Timer();
