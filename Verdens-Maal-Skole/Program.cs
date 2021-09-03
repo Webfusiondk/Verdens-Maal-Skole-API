@@ -8,7 +8,11 @@ namespace Verdens_Maal_Skole
         static ArduinoManager manager = new ArduinoManager();
         public static void Main(string[] args)
         {
-            manager.StartEventTimer();
+            //manager.StartEventTimer();
+            foreach (string item in manager.GetDataFromRoom("B.16"))
+            {
+                System.Console.WriteLine(item);
+            }
             CreateHostBuilder(args).Build().Run();
         }
 

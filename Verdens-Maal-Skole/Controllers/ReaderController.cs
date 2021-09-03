@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,17 @@ namespace Verdens_Maal_Skole.Controllers
 {
     public class ReaderController : Controller
     {
-        public IActionResult Index()
+        private readonly ILogger<ReaderController> _logger;
+
+        public ReaderController(ILogger<ReaderController> logger)
         {
-            return View();
+            _logger = logger;
         }
+
+        //[HttpGet]
+        //public string[] Get()
+        //{
+
+        //}
     }
 }

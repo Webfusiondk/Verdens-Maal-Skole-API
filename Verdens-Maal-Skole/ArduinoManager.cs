@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace Verdens_Maal_Skole
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
 
-        public async Task<string[]> GetDataAsync()
+        public async Task<string[]> GetArdDataAsync()
         {
             try
             {
@@ -38,6 +39,31 @@ namespace Verdens_Maal_Skole
             }
         }
 
+        public List<string> GetDataFromRoom(string roomNr)
+        {
+            List<string> dataList = new List<string>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText = $"EXEC [spGetReadingByRoomNr] {roomNr}";
+
+                    var reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        foreach(var row in reader)
+                        {
+                            dataList.Add(row.ToString());
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return dataList;
+        }
+
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
@@ -48,7 +74,7 @@ namespace Verdens_Maal_Skole
                 {
                     isDone = false;
 
-                    Task<string[]> task = GetDataAsync();
+                    Task<string[]> task = GetArdDataAsync();
 
                     if (task.Result.Length == 3)
                     {
@@ -84,22 +110,22 @@ namespace Verdens_Maal_Skole
             {
                 connection.Open();
 
-                using (var command = connection.CreateCommand())
+                using (var cmd = connection.CreateCommand())
                 {
-                    command.CommandText = 
-                    @"INSERT INTO Light([Read]) VALUES (@light);
-                    INSERT INTO Temperature([Read]) VALUES (@Temperature);
-                    INSERT INTO [Humidity]([Read]) VALUES (@humidity);";
+                    cmd.CommandText = @"EXEC spInsertSensorData @roomNr, @temperature, @humidity, @light";
+                    
+                    cmd.Parameters.AddWithValue(@"@roomNr", "B.16");
+                    cmd.Parameters.AddWithValue(@"@temperature", array[0]);
+                    cmd.Parameters.AddWithValue(@"humidity", array[1]);
+                    cmd.Parameters.AddWithValue(@"light", array[2]);
 
-                    command.Parameters.AddWithValue("@humidity", array[0]);
-                    command.Parameters.AddWithValue("@Temperature", array[1]);
-                    command.Parameters.AddWithValue("@light", array[2]);
-
-                    command.ExecuteNonQuery();
-                };
+                    cmd.ExecuteNonQuery();
+                    Console.WriteLine("Data has been posted to Database");
+                }
 
                 connection.Close();
             }
+
         }
 
 
