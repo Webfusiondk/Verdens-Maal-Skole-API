@@ -7,14 +7,23 @@ namespace Verdens_Maal_Skole
 {
     public class Light : ReaderData
     {
-        public Light(string description, int value, DateTime time)
+        public Light(int value, DateTime time)
         {
             Time = time;
             Value = value;
-            Description = description;
+            IsLightOn();
         }
 
-        public string Description { get; set; }
+        public bool LightIsOn { get; set; }
 
+        void IsLightOn()
+        {
+            if (Value < 500)
+            {
+                LightIsOn = false;
+            }
+            else
+                LightIsOn = true;
+        }
     }
 }
