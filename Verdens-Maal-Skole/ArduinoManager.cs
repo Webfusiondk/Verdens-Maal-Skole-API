@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Net.Http;
@@ -41,27 +42,69 @@ namespace Verdens_Maal_Skole
 
         public List<string> GetDataFromRoom(string roomNr)
         {
+
             List<string> dataList = new List<string>();
+            SqlConnection connection;
+            SqlDataAdapter adapter;
+            SqlCommand command = new SqlCommand();
+            SqlParameter param;
+            DataSet ds = new DataSet();
 
-            using (var connection = new SqlConnection(connectionString))
+            int i = 0;
+
+            connection = new SqlConnection(connectionString);
+
+            connection.Open();
+            command.Connection = connection;
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = "spGetReadingByRoomNr";
+
+            param = new SqlParameter("@roomNr", roomNr);
+            param.Direction = ParameterDirection.Input;
+            param.DbType = DbType.String;
+            command.Parameters.Add(param);
+
+            adapter = new SqlDataAdapter(command);
+            adapter.Fill(ds);
+
+            for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
             {
-                connection.Open();
-                using (var command = new SqlCommand())
-                {
-                    command.CommandText = $"EXEC [spGetReadingByRoomNr] {roomNr}";
-
-                    var reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        foreach(var row in reader)
-                        {
-                            dataList.Add(row.ToString());
-                        }
-                    }
-                }
-                connection.Close();
+                dataList.Add(ds.Tables[0].Rows[i][0].ToString());
             }
+
+            connection.Close();
+
             return dataList;
+
+
+
+
+
+            //SqlDataReader rd;
+            //int strnr = 0;
+
+            //List<string> dataList = new List<string>();
+
+            //using (var con = new SqlConnection(connectionString))
+            //{
+            //    con.Open();
+            //    using (var cmd = new SqlCommand())
+            //    {
+            //        cmd.Connection = con;
+            //        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            //        cmd.CommandText = $"[spGetReadingByRoomNr]";
+            //        cmd.Parameters.AddWithValue("@roomNr", roomNr);
+            //        rd = cmd.ExecuteReader();
+            //        while (rd.Read())
+            //        {
+            //            strnr++;
+            //            dataList.Add(rd.GetString(strnr));
+            //        }
+            //        rd.Close();
+            //    }
+            //    con.Close();
+            //}
+            //return dataList;
         }
 
 
@@ -113,7 +156,7 @@ namespace Verdens_Maal_Skole
                 using (var cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = @"EXEC spInsertSensorData @roomNr, @temperature, @humidity, @light";
-                    
+
                     cmd.Parameters.AddWithValue(@"@roomNr", "B.16");
                     cmd.Parameters.AddWithValue(@"@temperature", array[0]);
                     cmd.Parameters.AddWithValue(@"humidity", array[1]);
