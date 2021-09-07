@@ -7,8 +7,9 @@ namespace Verdens_Maal_Skole
 {
     public class Humidity : ReaderData
     {
-        public Humidity(float value, DateTime time)
+        public Humidity(float value, DateTime time,string roomNumber)
         {
+            RoomNumber = roomNumber;
             Value = value;
             Time = time;
         }

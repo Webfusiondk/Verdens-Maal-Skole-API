@@ -37,6 +37,12 @@ namespace Verdens_Maal_Skole
                 app.UseDeveloperExceptionPage();
             }
 
+            //Allowing anyone to call the api. This is not good for security
+            app.UseCors(x => x
+           .AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader());
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

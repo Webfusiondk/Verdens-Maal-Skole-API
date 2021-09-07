@@ -7,19 +7,16 @@ using System.Threading.Tasks;
 
 namespace Verdens_Maal_Skole.Controllers
 {
+    [Route("data")]
+    [ApiController]
     public class ReaderController : Controller
     {
-        private readonly ILogger<ReaderController> _logger;
+        ArduinoManager manger = new ArduinoManager();
 
-        public ReaderController(ILogger<ReaderController> logger)
+        [HttpGet("all")]
+        public IActionResult GetAllData()
         {
-            _logger = logger;
+            return Ok(manger.GetAllReades());
         }
-
-        //[HttpGet]
-        //public string[] Get()
-        //{
-
-        //}
     }
 }

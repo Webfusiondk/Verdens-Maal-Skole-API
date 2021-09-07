@@ -7,8 +7,9 @@ namespace Verdens_Maal_Skole
 {
     public class Light : ReaderData
     {
-        public Light(int value, DateTime time)
+        public Light(int value, DateTime time,string RoomNumber)
         {
+            RoomNumber = RoomNumber;
             Time = time;
             Value = value;
             IsLightOn();

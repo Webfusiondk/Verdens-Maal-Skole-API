@@ -7,8 +7,9 @@ namespace Verdens_Maal_Skole
 {
     public class Temperature : ReaderData
     {
-        public Temperature(float value, DateTime time)
+        public Temperature(float value, DateTime time, string roomNumber)
         {
+            RoomNumber = roomNumber;
             Value = value;
             Time = time;
         }

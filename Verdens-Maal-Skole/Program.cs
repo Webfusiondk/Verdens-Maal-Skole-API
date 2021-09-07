@@ -9,10 +9,10 @@ namespace Verdens_Maal_Skole
         public static void Main(string[] args)
         {
             //manager.StartEventTimer();
-            foreach (string item in manager.GetDataFromRoom("B.16"))
-            {
-                System.Console.WriteLine(item);
-            }
+            //foreach (string item in manager.GetDataFromRoom("B.16"))
+            //{
+            //    System.Console.WriteLine(item);
+            //}
             CreateHostBuilder(args).Build().Run();
         }
 

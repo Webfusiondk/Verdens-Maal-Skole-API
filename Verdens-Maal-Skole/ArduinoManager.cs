@@ -16,7 +16,22 @@ namespace Verdens_Maal_Skole
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
+        List<ReaderData> data = new List<ReaderData>() {
+        new Light(800,DateTime.Now,"A23"),
+        new Humidity(60,DateTime.Now,"A23"),
+        new Light(600,DateTime.Now,"A23"),
+        new Temperature(17,DateTime.Now.AddSeconds(20),"A23"),
+        new Humidity(40,DateTime.Now.AddSeconds(20),"A23"),
+        new Temperature(15,DateTime.Now.AddSeconds(20),"A23"),
+        };
 
+        public List<ReaderData> GetAllReades()
+        {
+            //Should call in database to get all data
+            //Right now returning dummy data
+
+            return data;
+        }
         public async Task<string[]> GetArdDataAsync()
         {
             try
