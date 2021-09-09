@@ -13,10 +13,26 @@ namespace Verdens_Maal_Skole.Controllers
     {
         ArduinoManager manger = new ArduinoManager();
 
+        //Get all reader data
         [HttpGet("all")]
         public IActionResult GetAllData()
         {
             return Ok(manger.GetAllReades());
+        }
+
+        //Get all room numbers
+        [HttpGet("rooms")]
+        public IActionResult GetAllRooms()
+        {
+            return Ok(manger.GetRoomNumbers());
+        }
+
+
+        //Get all reader data by room nr
+        [HttpGet("room")]
+        public IActionResult GetAllDataByRoomNr(int roomNr)
+        {
+            return Ok();
         }
     }
 }

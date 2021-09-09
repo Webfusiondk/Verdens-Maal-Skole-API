@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace Verdens_Maal_Skole
 {
-    public class Temperature : ReaderData
+    public class Temperature
     {
-        public Temperature(float value, DateTime time, string roomNumber)
+        public float Value { get; set; }
+        public Temperature(float value)
         {
-            RoomNumber = roomNumber;
             Value = value;
-            Time = time;
         }
     }
 }

@@ -5,14 +5,18 @@ using System.Threading.Tasks;
 
 namespace Verdens_Maal_Skole
 {
-    public class Light : ReaderData
+    public class Light
     {
-        public Light(int value, DateTime time,string RoomNumber)
+        public float Value { get; set; }
+        public Light(int value)
         {
-            RoomNumber = RoomNumber;
-            Time = time;
             Value = value;
             IsLightOn();
+        }
+        public Light(int value, bool lightIsOn)
+        {
+            Value = value;
+            LightIsOn = lightIsOn;
         }
 
         public bool LightIsOn { get; set; }

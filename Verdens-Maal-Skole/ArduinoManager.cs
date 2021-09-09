@@ -12,32 +12,67 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static string connectionString = @"Server = (localdb)\MSSQLLOCALDB; Database = ArduinoDB"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
+        static string connectionString = @"Server = ZBC-EMA-UDL2310; Database = ArduinoDB; Trusted_Connection=True;"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
-        List<ReaderData> data = new List<ReaderData>() {
-        new Light(800,DateTime.Now,"A23"),
-        new Humidity(60,DateTime.Now,"A23"),
-        new Light(600,DateTime.Now,"A23"),
-        new Temperature(17,DateTime.Now.AddSeconds(20),"A23"),
-        new Humidity(40,DateTime.Now.AddSeconds(20),"A23"),
-        new Temperature(15,DateTime.Now.AddSeconds(20),"A23"),
-        };
 
         public List<ReaderData> GetAllReades()
         {
-            //Should call in database to get all data
-            //Right now returning dummy data
+            List<ReaderData> dataList = new List<ReaderData>();
+            SqlConnection connection;
+            SqlDataAdapter adapter;
+            SqlCommand command = new SqlCommand();
+            DataSet ds = new DataSet();
 
-            return data;
+            int i = 0;
+
+            connection = new SqlConnection(connectionString);
+
+            connection.Open();
+            command.Connection = connection;
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = "spGetAll";
+
+
+            adapter = new SqlDataAdapter(command);
+            adapter.Fill(ds);
+
+            //We take the data tables and loop threw the rows to take out the data we need to create a ReaderDate Obj
+            for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+            {
+                dataList.Add(new ReaderData(ds.Tables[0].Rows[i][5].ToString(),
+                    SplitStringToDateTime(ds.Tables[0].Rows[i][8].ToString()),
+                    new Temperature(float.Parse(ds.Tables[0].Rows[i][10].ToString())),
+                    new Humidity(float.Parse(ds.Tables[0].Rows[i][7].ToString())),
+                    new Light(Int32.Parse(ds.Tables[0].Rows[i][13].ToString()),
+                    ConvertStringToBoolean(ds.Tables[0].Rows[i][14].ToString()))));
+            }
+
+            connection.Close();
+
+            return dataList;
+        }
+        private bool ConvertStringToBoolean(string data)
+        {
+            if (data == "1")
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        private DateTime SplitStringToDateTime(string date)
+        {
+            DateTime time = DateTime.Parse(date);
+            return time;
         }
         public async Task<string[]> GetArdDataAsync()
         {
             try
             {
                 //Sending http request to website
-                HttpResponseMessage respons = await _client.GetAsync(@"http://192.168.1.132/"); //MAKE SURE TO CHECK FOR UPDATED ARDUINO IP
+                HttpResponseMessage respons = await _client.GetAsync(@"http://192.168.1.135/"); //MAKE SURE TO CHECK FOR UPDATED ARDUINO IP
                 respons.EnsureSuccessStatusCode();
                 //Reading the response from website
                 string responsBody = await respons.Content.ReadAsStringAsync();
@@ -84,7 +119,7 @@ namespace Verdens_Maal_Skole
 
             for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
             {
-                dataList.Add(ds.Tables[0].Rows[i][0].ToString());
+                dataList.Add(ds.Tables[0].Rows[i][1].ToString());
             }
 
             connection.Close();
@@ -122,6 +157,29 @@ namespace Verdens_Maal_Skole
             //return dataList;
         }
 
+        public List<string> GetRoomNumbers()
+        {
+            List<string> listOfRooms = new List<string>();
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT * FROM Room";
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    
+                    while (reader.Read())
+                    {
+                        listOfRooms.Add(reader["RoomNr"].ToString());
+
+                    }
+                }
+
+                connection.Close();
+            }
+            return listOfRooms;
+        }
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
@@ -136,7 +194,7 @@ namespace Verdens_Maal_Skole
 
                     if (task.Result.Length == 3)
                     {
-                        PostToDatabase(ConvertStringToFloat(task));
+                        PostToDatabase(ConvertStringArrayToFloatArray(task));
                     }
 
                     isDone = true;
@@ -147,9 +205,7 @@ namespace Verdens_Maal_Skole
                 Console.WriteLine("ERROR: " + ex.Message);
             }
         }
-
-
-        private float[] ConvertStringToFloat(Task<string[]> data)
+        private float[] ConvertStringArrayToFloatArray(Task<string[]> data)
         {
             var ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
             ci.NumberFormat.NumberDecimalSeparator = ".";
