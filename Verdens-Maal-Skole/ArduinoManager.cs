@@ -17,7 +17,7 @@ namespace Verdens_Maal_Skole
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
 
-        public List<ReaderData> GetAllReades()
+        public List<ReaderData> GetAllReaders()
         {
             List<ReaderData> dataList = new List<ReaderData>();
             SqlConnection connection;

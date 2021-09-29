@@ -17,7 +17,7 @@ namespace Verdens_Maal_Skole.Controllers
         [HttpGet("all")]
         public IActionResult GetAllData()
         {
-            return Ok(manger.GetAllReades());
+            return Ok(manger.GetAllReaders());
         }
 
         //Get all room numbers
