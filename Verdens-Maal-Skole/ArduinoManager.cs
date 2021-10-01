@@ -12,7 +12,7 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static string connectionString = @"Server = ZBC-EMA-UDL2310; Database = ArduinoDB; Trusted_Connection=True;"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
+        static string connectionString = @"Server = (localdb)\MSSQLLOCALDB; Database = ArduinoDB; Trusted_Connection=True;"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
@@ -72,7 +72,7 @@ namespace Verdens_Maal_Skole
             try
             {
                 //Sending http request to website
-                HttpResponseMessage respons = await _client.GetAsync(@"http://192.168.1.135/"); //MAKE SURE TO CHECK FOR UPDATED ARDUINO IP
+                HttpResponseMessage respons = await _client.GetAsync(@"http://192.168.1.132/"); //MAKE SURE TO CHECK FOR UPDATED ARDUINO IP
                 respons.EnsureSuccessStatusCode();
                 //Reading the response from website
                 string responsBody = await respons.Content.ReadAsStringAsync();
@@ -93,38 +93,46 @@ namespace Verdens_Maal_Skole
         public List<string> GetDataFromRoom(string roomNr)
         {
 
-            List<string> dataList = new List<string>();
-            SqlConnection connection;
-            SqlDataAdapter adapter;
-            SqlCommand command = new SqlCommand();
-            SqlParameter param;
-            DataSet ds = new DataSet();
-
-            int i = 0;
-
-            connection = new SqlConnection(connectionString);
-
-            connection.Open();
-            command.Connection = connection;
-            command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "spGetReadingByRoomNr";
-
-            param = new SqlParameter("@roomNr", roomNr);
-            param.Direction = ParameterDirection.Input;
-            param.DbType = DbType.String;
-            command.Parameters.Add(param);
-
-            adapter = new SqlDataAdapter(command);
-            adapter.Fill(ds);
-
-            for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+            try
             {
-                dataList.Add(ds.Tables[0].Rows[i][1].ToString());
+                List<string> dataList = new List<string>();
+                SqlConnection connection;
+                SqlDataAdapter adapter;
+                SqlCommand command = new SqlCommand();
+                SqlParameter param;
+                DataSet ds = new DataSet();
+
+                int i = 0;
+
+                connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                command.Connection = connection;
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "spGetReadingByRoomNr";
+
+                param = new SqlParameter("@roomNr", roomNr);
+                param.Direction = ParameterDirection.Input;
+                param.DbType = DbType.String;
+                command.Parameters.Add(param);
+
+                adapter = new SqlDataAdapter(command);
+                adapter.Fill(ds);
+
+                for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+                {
+                    dataList.Add(ds.Tables[0].Rows[i][1].ToString());
+                }
+
+                connection.Close();
+
+                return dataList;
             }
-
-            connection.Close();
-
-            return dataList;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
 
 
 
