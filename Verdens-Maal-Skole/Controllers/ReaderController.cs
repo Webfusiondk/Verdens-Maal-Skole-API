@@ -11,28 +11,28 @@ namespace Verdens_Maal_Skole.Controllers
     [ApiController]
     public class ReaderController : Controller
     {
-        ArduinoManager manger = new ArduinoManager();
+        ArduinoManager manager = new ArduinoManager();
 
         //Get all reader data
         [HttpGet("all")]
         public IActionResult GetAllData()
         {
-            return Ok(manger.GetAllReaders());
+            return Ok(manager.GetAllReaders());
         }
 
         //Get all room numbers
         [HttpGet("rooms")]
         public IActionResult GetAllRooms()
         {
-            return Ok(manger.GetRoomNumbers());
+            return Ok(manager.GetRoomNumbers());
         }
 
 
         //Get all reader data by room nr
         [HttpGet("room")]
-        public IActionResult GetAllDataByRoomNr(int roomNr)
+        public IActionResult GetAllDataByRoomNr(string roomNr)
         {
-            return Ok();
+            return Ok(manager.GetDataFromRoom(roomNr));
         }
     }
 }
