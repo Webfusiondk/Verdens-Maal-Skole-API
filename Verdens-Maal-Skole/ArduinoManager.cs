@@ -16,6 +16,7 @@ namespace Verdens_Maal_Skole
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
 
+
         public bool ConvertStringToBoolean(string data)
         {
             if (data == "1")
@@ -112,15 +113,18 @@ namespace Verdens_Maal_Skole
             aTimer.Enabled = true;
         }
 
+
         public List<ReaderData> GetAllReaders()
         {
              return DataAccess.GetAllReaders();
         }
 
+
         public List<string> GetRoomNumbers()
         {
             return DataAccess.GetRoomNumbers();
         }
+
 
         public List<ReaderData> GetDataFromRoom(string roomNr)
         {

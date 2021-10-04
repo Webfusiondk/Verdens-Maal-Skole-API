@@ -8,11 +8,13 @@ namespace Verdens_Maal_Skole
     public class Light
     {
         public float Value { get; set; }
+        
         public Light(int value)
         {
             Value = value;
             IsLightOn();
         }
+
         public Light(int value, bool lightIsOn)
         {
             Value = value;
