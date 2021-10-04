@@ -15,7 +15,6 @@ namespace Verdens_Maal_Skole
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
-        DataAccess DataAccess = new DataAccess();
 
         public bool ConvertStringToBoolean(string data)
         {

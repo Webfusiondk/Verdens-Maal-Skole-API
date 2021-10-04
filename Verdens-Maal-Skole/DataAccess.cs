@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+using System.Globalization;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Verdens_Maal_Skole
 {
-    public class DataAccess
+    public static class DataAccess
     {
         static string connectionString = @"Server = (localdb)\MSSQLLOCALDB; Database = ArduinoDB; Trusted_Connection=True;"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
-        ArduinoManager ArduinoManager = new ArduinoManager();
+        
 
-        public void PostToDatabase(float[] array)
+        public static void PostToDatabase(float[] array)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -36,8 +39,10 @@ namespace Verdens_Maal_Skole
 
         }
 
-        public List<ReaderData> GetAllReaders()
+
+        public static List<ReaderData> GetAllReaders()
         {
+            ArduinoManager arduinoManager = new ArduinoManager();
             List<ReaderData> dataList = new List<ReaderData>();
             SqlConnection connection;
             SqlDataAdapter adapter;
@@ -61,11 +66,11 @@ namespace Verdens_Maal_Skole
             for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
             {
                 dataList.Add(new ReaderData(ds.Tables[0].Rows[i][5].ToString(),
-                    ArduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][8].ToString()),
+                    arduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][8].ToString()),
                     new Temperature(float.Parse(ds.Tables[0].Rows[i][10].ToString())),
                     new Humidity(float.Parse(ds.Tables[0].Rows[i][7].ToString())),
                     new Light(Int32.Parse(ds.Tables[0].Rows[i][13].ToString()),
-                    ArduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][14].ToString()))));
+                    arduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][14].ToString()))));
             }
 
             connection.Close();
@@ -74,8 +79,9 @@ namespace Verdens_Maal_Skole
         }
 
 
-        public List<ReaderData> GetDataFromRoom(string roomNr)
+        public static List<ReaderData> GetDataFromRoom(string roomNr)
         {
+            ArduinoManager arduinoManager = new ArduinoManager();
             try
             {
                 List<ReaderData> dataList = new List<ReaderData>();
@@ -105,11 +111,11 @@ namespace Verdens_Maal_Skole
                 for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
                 {
                     dataList.Add(new ReaderData(roomNr,
-                   ArduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][7].ToString()),
+                   arduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][7].ToString()),
                    new Temperature(float.Parse(ds.Tables[0].Rows[i][9].ToString())),
                    new Humidity(float.Parse(ds.Tables[0].Rows[i][6].ToString())),
                    new Light(Int32.Parse(ds.Tables[0].Rows[i][12].ToString()),
-                   ArduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][13].ToString())))
+                   arduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][13].ToString())))
                         );
                 }
 
@@ -124,7 +130,8 @@ namespace Verdens_Maal_Skole
             }
         }
 
-        public List<string> GetRoomNumbers()
+
+        public static List<string> GetRoomNumbers()
         {
             List<string> listOfRooms = new List<string>();
             using (var connection = new SqlConnection(connectionString))
