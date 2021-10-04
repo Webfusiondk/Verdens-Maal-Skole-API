@@ -12,48 +12,12 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static string connectionString = @"Server = (localdb)\MSSQLLOCALDB; Database = ArduinoDB; Trusted_Connection=True;"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
+        DataAccess DataAccess = new DataAccess();
 
-        public List<ReaderData> GetAllReaders()
-        {
-            List<ReaderData> dataList = new List<ReaderData>();
-            SqlConnection connection;
-            SqlDataAdapter adapter;
-            SqlCommand command = new SqlCommand();
-            DataSet ds = new DataSet();
-
-            int i = 0;
-
-            connection = new SqlConnection(connectionString);
-
-            connection.Open();
-            command.Connection = connection;
-            command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "spGetAll";
-
-
-            adapter = new SqlDataAdapter(command);
-            adapter.Fill(ds);
-
-            //We take the data tables and loop threw the rows to take out the data we need to create a ReaderDate Obj
-            for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
-            {
-                dataList.Add(new ReaderData(ds.Tables[0].Rows[i][5].ToString(),
-                    SplitStringToDateTime(ds.Tables[0].Rows[i][8].ToString()),
-                    new Temperature(float.Parse(ds.Tables[0].Rows[i][10].ToString())),
-                    new Humidity(float.Parse(ds.Tables[0].Rows[i][7].ToString())),
-                    new Light(Int32.Parse(ds.Tables[0].Rows[i][13].ToString()),
-                    ConvertStringToBoolean(ds.Tables[0].Rows[i][14].ToString()))));
-            }
-
-            connection.Close();
-
-            return dataList;
-        }
-        private bool ConvertStringToBoolean(string data)
+        public bool ConvertStringToBoolean(string data)
         {
             if (data == "1")
             {
@@ -62,11 +26,15 @@ namespace Verdens_Maal_Skole
             else
                 return false;
         }
-        private DateTime SplitStringToDateTime(string date)
+
+
+        public DateTime SplitStringToDateTime(string date)
         {
             DateTime time = DateTime.Parse(date);
             return time;
         }
+
+
         public async Task<string[]> GetArdDataAsync()
         {
             try
@@ -90,79 +58,6 @@ namespace Verdens_Maal_Skole
             }
         }
 
-        public List<ReaderData> GetDataFromRoom(string roomNr)
-        {
-            try
-            {
-                List<ReaderData> dataList = new List<ReaderData>();
-                SqlConnection connection;
-                SqlDataAdapter adapter;
-                SqlCommand command = new SqlCommand();
-                SqlParameter param;
-                DataSet ds = new DataSet();
-
-                int i = 0;
-
-                connection = new SqlConnection(connectionString);
-
-                connection.Open();
-                command.Connection = connection;
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandText = "spGetReadingByRoomNr";
-
-                param = new SqlParameter("@roomNr", roomNr);
-                param.Direction = ParameterDirection.Input;
-                param.DbType = DbType.String;
-                command.Parameters.Add(param);
-
-                adapter = new SqlDataAdapter(command);
-                adapter.Fill(ds);
-
-                for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
-                {
-                    dataList.Add(new ReaderData(roomNr,
-                   SplitStringToDateTime(ds.Tables[0].Rows[i][7].ToString()),
-                   new Temperature(float.Parse(ds.Tables[0].Rows[i][9].ToString())),
-                   new Humidity(float.Parse(ds.Tables[0].Rows[i][6].ToString())),
-                   new Light(Int32.Parse(ds.Tables[0].Rows[i][12].ToString()),
-                   ConvertStringToBoolean(ds.Tables[0].Rows[i][13].ToString())))
-                        );
-                }
-
-                connection.Close();
-
-                return dataList;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
-        public List<string> GetRoomNumbers()
-        {
-            List<string> listOfRooms = new List<string>();
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                using (var cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Room";
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    
-                    while (reader.Read())
-                    {
-                        listOfRooms.Add(reader["RoomNr"].ToString());
-
-                    }
-                }
-
-                connection.Close();
-            }
-            return listOfRooms;
-        }
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
@@ -177,7 +72,7 @@ namespace Verdens_Maal_Skole
 
                     if (task.Result.Length == 3)
                     {
-                        PostToDatabase(ConvertStringArrayToFloatArray(task));
+                        DataAccess.PostToDatabase(ConvertStringArrayToFloatArray(task));
                     }
 
                     isDone = true;
@@ -188,7 +83,9 @@ namespace Verdens_Maal_Skole
                 Console.WriteLine("ERROR: " + ex.Message);
             }
         }
-        private float[] ConvertStringArrayToFloatArray(Task<string[]> data)
+
+
+        public float[] ConvertStringArrayToFloatArray(Task<string[]> data)
         {
             var ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
             ci.NumberFormat.NumberDecimalSeparator = ".";
@@ -198,31 +95,6 @@ namespace Verdens_Maal_Skole
                 temp[i] = float.Parse(data.Result[i], ci);
             }
             return temp;
-        }
-
-
-        private void PostToDatabase(float[] array)
-        {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                using (var cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = @"EXEC spInsertSensorData @roomNr, @temperature, @humidity, @light";
-
-                    cmd.Parameters.AddWithValue(@"@roomNr", "B.16");
-                    cmd.Parameters.AddWithValue(@"@temperature", array[0]);
-                    cmd.Parameters.AddWithValue(@"humidity", array[1]);
-                    cmd.Parameters.AddWithValue(@"light", array[2]);
-
-                    cmd.ExecuteNonQuery();
-                    Console.WriteLine("Data has been posted to Database");
-                }
-
-                connection.Close();
-            }
-
         }
 
 
@@ -240,5 +112,21 @@ namespace Verdens_Maal_Skole
             // Start the timer
             aTimer.Enabled = true;
         }
+
+        public List<ReaderData> GetAllReaders()
+        {
+             return DataAccess.GetAllReaders();
+        }
+
+        public List<string> GetRoomNumbers()
+        {
+            return DataAccess.GetRoomNumbers();
+        }
+
+        public List<ReaderData> GetDataFromRoom(string roomNr)
+        {
+            return DataAccess.GetDataFromRoom(roomNr);
+        }
+
     }
 }
