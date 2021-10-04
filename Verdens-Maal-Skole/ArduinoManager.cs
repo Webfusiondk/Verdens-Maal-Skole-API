@@ -90,12 +90,11 @@ namespace Verdens_Maal_Skole
             }
         }
 
-        public List<string> GetDataFromRoom(string roomNr)
+        public List<ReaderData> GetDataFromRoom(string roomNr)
         {
-
             try
             {
-                List<string> dataList = new List<string>();
+                List<ReaderData> dataList = new List<ReaderData>();
                 SqlConnection connection;
                 SqlDataAdapter adapter;
                 SqlCommand command = new SqlCommand();
@@ -121,7 +120,13 @@ namespace Verdens_Maal_Skole
 
                 for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
                 {
-                    dataList.Add(ds.Tables[0].Rows[i][1].ToString());
+                    dataList.Add(new ReaderData(roomNr,
+                   SplitStringToDateTime(ds.Tables[0].Rows[i][7].ToString()),
+                   new Temperature(float.Parse(ds.Tables[0].Rows[i][9].ToString())),
+                   new Humidity(float.Parse(ds.Tables[0].Rows[i][6].ToString())),
+                   new Light(Int32.Parse(ds.Tables[0].Rows[i][12].ToString()),
+                   ConvertStringToBoolean(ds.Tables[0].Rows[i][13].ToString())))
+                        );
                 }
 
                 connection.Close();
@@ -133,36 +138,6 @@ namespace Verdens_Maal_Skole
                 Console.WriteLine(ex.Message);
                 return null;
             }
-
-
-
-
-
-            //SqlDataReader rd;
-            //int strnr = 0;
-
-            //List<string> dataList = new List<string>();
-
-            //using (var con = new SqlConnection(connectionString))
-            //{
-            //    con.Open();
-            //    using (var cmd = new SqlCommand())
-            //    {
-            //        cmd.Connection = con;
-            //        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            //        cmd.CommandText = $"[spGetReadingByRoomNr]";
-            //        cmd.Parameters.AddWithValue("@roomNr", roomNr);
-            //        rd = cmd.ExecuteReader();
-            //        while (rd.Read())
-            //        {
-            //            strnr++;
-            //            dataList.Add(rd.GetString(strnr));
-            //        }
-            //        rd.Close();
-            //    }
-            //    con.Close();
-            //}
-            //return dataList;
         }
 
         public List<string> GetRoomNumbers()
