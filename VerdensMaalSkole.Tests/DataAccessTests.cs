@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Verdens_Maal_Skole;
+using Xunit;
 
 namespace VerdensMaalSkole.Tests
 {
@@ -13,7 +14,7 @@ namespace VerdensMaalSkole.Tests
             //Act
             bool actual = false;
 
-            if (Verdens_Maal_Skole.DataAccess.GetAllReaders() != null)
+            if (DataAccess.GetAllReaders() != null)
             {
                 actual = true;
             }

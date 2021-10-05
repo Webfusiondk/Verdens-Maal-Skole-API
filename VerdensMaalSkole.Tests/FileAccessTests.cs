@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Verdens_Maal_Skole;
+using Xunit;
 
 namespace VerdensMaalSkole.Tests
 {
@@ -8,15 +9,14 @@ namespace VerdensMaalSkole.Tests
         public void ReadConnectionString_ShouldReturnString()
         {
             //Arrange
-            Verdens_Maal_Skole.FileAccess fileAccess = new Verdens_Maal_Skole.FileAccess();
 
             bool expected = true;
-
+            
 
             //Act
             bool actual = false;
 
-            if(fileAccess.ReadConnectionString() != string.Empty)
+            if(FileAccess.ReadConnectionString() != string.Empty)
             {
                 actual = true;
             }
