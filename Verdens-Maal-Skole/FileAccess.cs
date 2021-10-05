@@ -8,6 +8,7 @@ namespace Verdens_Maal_Skole
     {
         string conStringPath = Environment.CurrentDirectory + "\\DatabaseConnection.txt";
 
+
         public string ReadConnectionString()
         {
             List<string> result = new List<string>();

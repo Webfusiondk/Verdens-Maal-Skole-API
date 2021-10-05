@@ -9,6 +9,7 @@ namespace Verdens_Maal_Skole
     {
         static string connectionString = string.Empty; //Make sure the file has YOUR connectionstring
 
+
         private static void GetConnectionString()
         {
             FileAccess fileAccess = new FileAccess();
