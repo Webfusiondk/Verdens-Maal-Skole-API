@@ -7,20 +7,18 @@ namespace Verdens_Maal_Skole
 {
     public static class DataAccess
     {
-        static string connectionString = string.Empty; //Make sure the file has YOUR connectionstring
+        static string connectionString = GetConnectionString(); //Make sure the file has YOUR connectionstring
 
 
-        private static void GetConnectionString()
+        private static string GetConnectionString()
         {
             FileAccess fileAccess = new FileAccess();
-            connectionString = fileAccess.ReadConnectionString();
+            return fileAccess.ReadConnectionString();
         }
 
 
         public static void PostToDatabase(float[] array)
         {
-            GetConnectionString();
-
             try
             {
                 using (var connection = new SqlConnection(connectionString))
@@ -53,10 +51,8 @@ namespace Verdens_Maal_Skole
 
         public static DataSet GetAllReaders()
         {
-
             try
             {
-                GetConnectionString();
                 SqlConnection connection;
                 SqlDataAdapter adapter;
                 SqlCommand command = new SqlCommand();
@@ -88,7 +84,6 @@ namespace Verdens_Maal_Skole
         {
             try
             {
-                GetConnectionString();
                 SqlConnection connection;
                 SqlDataAdapter adapter;
                 SqlCommand command = new SqlCommand();
@@ -126,8 +121,6 @@ namespace Verdens_Maal_Skole
         {
             try
             {
-                GetConnectionString();
-
                 List<string> listOfRooms = new List<string>();
                 using (var connection = new SqlConnection(connectionString))
                 {
