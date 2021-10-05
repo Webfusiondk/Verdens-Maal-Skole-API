@@ -10,12 +10,20 @@ namespace Verdens_Maal_Skole
         static string connectionString = GetConnectionString(); //Make sure the file has YOUR connectionstring
 
 
+        /// <summary>
+        /// Returns a connectionstring
+        /// </summary>
+        /// <returns></returns>
         private static string GetConnectionString()
         {
             return FileAccess.ReadConnectionString();
         }
 
 
+        /// <summary>
+        /// Saves a float array into the DB
+        /// </summary>
+        /// <param name="array"></param>
         public static void PostToDatabase(float[] array)
         {
             try
@@ -48,6 +56,10 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns a DataSet of all DB data
+        /// </summary>
+        /// <returns></returns>
         public static DataSet GetAllReaders()
         {
             try
@@ -79,6 +91,11 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns a DataSet with data from a specific room
+        /// </summary>
+        /// <param name="roomNr"></param>
+        /// <returns></returns>
         public static DataSet GetDataFromRoom(string roomNr)
         {
             try
@@ -116,6 +133,10 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns a list of strings containing all room numbers
+        /// </summary>
+        /// <returns></returns>
         public static List<string> GetRoomNumbers()
         {
             try

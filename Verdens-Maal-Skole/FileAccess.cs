@@ -6,9 +6,14 @@ namespace Verdens_Maal_Skole
 {
     public static class FileAccess
     {
+        //Path for local txt file containing the database connectionstring
         static string conStringPath = Environment.CurrentDirectory + "\\DatabaseConnection.txt";
 
 
+        /// <summary>
+        /// Returns connectionstring read from local txt file
+        /// </summary>
+        /// <returns></returns>
         public static string ReadConnectionString()
         {
             List<string> result = new List<string>();

@@ -16,6 +16,11 @@ namespace Verdens_Maal_Skole
         static readonly HttpClient _client = new HttpClient();
 
 
+        /// <summary>
+        /// Returns a boolean based off of a given string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public bool ConvertStringToBoolean(string data)
         {
             if (data == "1")
@@ -27,6 +32,11 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns a DateTime converted from a given string
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public DateTime SplitStringToDateTime(string date)
         {
             DateTime time = DateTime.Parse(date);
@@ -34,6 +44,10 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns arduino sensor data as string array
+        /// </summary>
+        /// <returns></returns>
         public async Task<string[]> GetArdDataAsync()
         {
             try
@@ -84,6 +98,11 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns a float array converted from a given string array
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public float[] ConvertStringArrayToFloatArray(Task<string[]> data)
         {
             var ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
@@ -113,6 +132,10 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns a List of ReaderData converted from a DB given Dataset
+        /// </summary>
+        /// <returns></returns>
         public List<ReaderData> GetAllReaders()
         {
             try
@@ -141,12 +164,21 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Returns a List of strings containing Room numbers
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetRoomNumbers()
         {
             return DataAccess.GetRoomNumbers();
         }
 
 
+        /// <summary>
+        /// Returns a list of ReaderData based on a given Room number
+        /// </summary>
+        /// <param name="roomNr"></param>
+        /// <returns></returns>
         public List<ReaderData> GetDataFromRoom(string roomNr)
         {
             try
