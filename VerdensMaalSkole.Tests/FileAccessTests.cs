@@ -2,24 +2,29 @@
 
 namespace VerdensMaalSkole.Tests
 {
-    public class DataAccessTests
+    public class FileAccessTests
     {
         [Fact]
-        public void GetAllReaders_ShouldReturnData()
+        public void ReadConnectionString_ShouldReturnString()
         {
             //Arrange
+            Verdens_Maal_Skole.FileAccess fileAccess = new Verdens_Maal_Skole.FileAccess();
+
             bool expected = true;
+
 
             //Act
             bool actual = false;
 
-            if (Verdens_Maal_Skole.DataAccess.GetAllReaders() != null)
+            if(fileAccess.ReadConnectionString() != string.Empty)
             {
                 actual = true;
             }
 
+
             //Assert
             Assert.Equal(expected, actual);
+
         }
     }
 }
