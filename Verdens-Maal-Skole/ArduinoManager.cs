@@ -11,9 +11,7 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static bool isDone = true;
         private static Timer aTimer;
-        static readonly HttpClient _client = new HttpClient();
 
 
         /// <summary>
@@ -50,6 +48,8 @@ namespace Verdens_Maal_Skole
         /// <returns></returns>
         public async Task<string[]> GetArdDataAsync()
         {
+            HttpClient _client = new HttpClient();
+
             try
             {
                 //Sending http request to website
@@ -74,6 +74,8 @@ namespace Verdens_Maal_Skole
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
+            bool isDone = true;
+
             try
             {
                 //Checks if the task is done before starting new
