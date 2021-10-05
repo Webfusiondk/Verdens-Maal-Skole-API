@@ -140,7 +140,7 @@ namespace Verdens_Maal_Skole
         {
             try
             {
-                DataSet dataSet = DataAccess.GetAllReaders();
+                DataSet dataSet = DataAccess.GetAllData();
                 int i = 0;
                 List<ReaderData> dataList = new List<ReaderData>();
 
@@ -168,9 +168,9 @@ namespace Verdens_Maal_Skole
         /// Returns a List of strings containing Room numbers
         /// </summary>
         /// <returns></returns>
-        public List<string> GetRoomNumbers()
+        public List<string> GetAllRoomNumbers()
         {
-            return DataAccess.GetRoomNumbers();
+            return DataAccess.GetAllRoomNumbers();
         }
 
 
@@ -179,11 +179,11 @@ namespace Verdens_Maal_Skole
         /// </summary>
         /// <param name="roomNr"></param>
         /// <returns></returns>
-        public List<ReaderData> GetDataFromRoom(string roomNr)
+        public List<ReaderData> GetReaderDataByRoomNr(string roomNr)
         {
             try
             {
-                DataSet dataSet = DataAccess.GetDataFromRoom(roomNr);
+                DataSet dataSet = DataAccess.GetDataByRoomNr(roomNr);
                 int i = 0;
                 List<ReaderData> dataList = new List<ReaderData>();
 

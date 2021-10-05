@@ -21,7 +21,7 @@ namespace Verdens_Maal_Skole.Controllers
         [HttpGet("rooms")]
         public IActionResult GetAllRooms()
         {
-            return Ok(manager.GetRoomNumbers());
+            return Ok(manager.GetAllRoomNumbers());
         }
 
 
@@ -29,7 +29,7 @@ namespace Verdens_Maal_Skole.Controllers
         [HttpGet("room")]
         public IActionResult GetAllDataByRoomNr(string roomNr)
         {
-            return Ok(manager.GetDataFromRoom(roomNr));
+            return Ok(manager.GetReaderDataByRoomNr(roomNr));
         }
     }
 }

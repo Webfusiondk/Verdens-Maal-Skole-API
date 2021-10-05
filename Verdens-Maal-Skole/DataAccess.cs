@@ -60,7 +60,7 @@ namespace Verdens_Maal_Skole
         /// Returns a DataSet of all DB data
         /// </summary>
         /// <returns></returns>
-        public static DataSet GetAllReaders()
+        public static DataSet GetAllData()
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Verdens_Maal_Skole
         /// </summary>
         /// <param name="roomNr"></param>
         /// <returns></returns>
-        public static DataSet GetDataFromRoom(string roomNr)
+        public static DataSet GetDataByRoomNr(string roomNr)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace Verdens_Maal_Skole
         /// Returns a list of strings containing all room numbers
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetRoomNumbers()
+        public static List<string> GetAllRoomNumbers()
         {
             try
             {

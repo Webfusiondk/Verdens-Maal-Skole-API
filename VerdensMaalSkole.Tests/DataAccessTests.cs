@@ -14,7 +14,7 @@ namespace VerdensMaalSkole.Tests
             //Act
             bool actual = false;
 
-            if (DataAccess.GetAllReaders() != null)
+            if (DataAccess.GetAllData() != null)
             {
                 actual = true;
             }
