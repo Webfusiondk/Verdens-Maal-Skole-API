@@ -1,0 +1,1 @@
+Server = (localdb)\MSSQLLOCALDB; Database = ArduinoDB; Trusted_Connection=True;

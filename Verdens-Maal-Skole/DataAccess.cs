@@ -12,11 +12,19 @@ namespace Verdens_Maal_Skole
 {
     public static class DataAccess
     {
-        static string connectionString = @"Server = (localdb)\MSSQLLOCALDB; Database = ArduinoDB; Trusted_Connection=True;"; //MAKE SURE IT'S YOUR OWN CONNECTIONSTRING
+        static string connectionString = string.Empty; //Make sure the file has YOUR connectionstring
         
+        private static void GetConnectionString()
+        {
+            FileAccess fileAccess = new FileAccess();
+            connectionString = fileAccess.ReadConnectionString();
+        }
+
 
         public static void PostToDatabase(float[] array)
         {
+            GetConnectionString();
+
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -42,6 +50,8 @@ namespace Verdens_Maal_Skole
 
         public static List<ReaderData> GetAllReaders()
         {
+            GetConnectionString();
+
             ArduinoManager arduinoManager = new ArduinoManager();
             List<ReaderData> dataList = new List<ReaderData>();
             SqlConnection connection;
@@ -81,6 +91,8 @@ namespace Verdens_Maal_Skole
 
         public static List<ReaderData> GetDataFromRoom(string roomNr)
         {
+            GetConnectionString();
+
             ArduinoManager arduinoManager = new ArduinoManager();
             try
             {
@@ -133,6 +145,8 @@ namespace Verdens_Maal_Skole
 
         public static List<string> GetRoomNumbers()
         {
+            GetConnectionString();
+
             List<string> listOfRooms = new List<string>();
             using (var connection = new SqlConnection(connectionString))
             {
