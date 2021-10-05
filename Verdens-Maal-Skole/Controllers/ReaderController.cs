@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Verdens_Maal_Skole.Controllers
 {
@@ -7,6 +8,15 @@ namespace Verdens_Maal_Skole.Controllers
     public class ReaderController : Controller
     {
         ArduinoManager manager = new ArduinoManager();
+
+        //[HttpPost]
+        //public async Task<ActionResult> ProvideReading()
+        //{
+        //    
+        //    
+        //    
+        //    return StatusCode(200);
+        //}
 
 
         //Get all reader data
