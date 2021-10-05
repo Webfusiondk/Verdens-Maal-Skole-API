@@ -10,7 +10,7 @@ namespace Verdens_Maal_Skole.Controllers
         ArduinoManager manager = new ArduinoManager();
 
         [HttpPost("providereading")]
-        public async Task<ActionResult> ProvideReading()
+        public async Task<ActionResult> ProvideReading(string data)
         {
 
 
