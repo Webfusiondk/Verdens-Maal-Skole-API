@@ -75,12 +75,12 @@ namespace Verdens_Maal_Skole
             //We take the data tables and loop threw the rows to take out the data we need to create a ReaderDate Obj
             for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
             {
-                dataList.Add(new ReaderData(ds.Tables[0].Rows[i][5].ToString(),
-                    arduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][8].ToString()),
-                    new Temperature(float.Parse(ds.Tables[0].Rows[i][10].ToString())),
-                    new Humidity(float.Parse(ds.Tables[0].Rows[i][7].ToString())),
-                    new Light(Int32.Parse(ds.Tables[0].Rows[i][13].ToString()),
-                    arduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][14].ToString()))));
+                dataList.Add(new ReaderData(ds.Tables[0].Rows[i][1].ToString(),
+                    arduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][5].ToString()),
+                    new Temperature(float.Parse(ds.Tables[0].Rows[i][8].ToString())),
+                    new Humidity(float.Parse(ds.Tables[0].Rows[i][10].ToString())),
+                    new Light(Int32.Parse(ds.Tables[0].Rows[i][12].ToString()),
+                    arduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][13].ToString()))));
             }
 
             connection.Close();
@@ -123,11 +123,11 @@ namespace Verdens_Maal_Skole
                 for (i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
                 {
                     dataList.Add(new ReaderData(roomNr,
-                   arduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][7].ToString()),
+                   arduinoManager.SplitStringToDateTime(ds.Tables[0].Rows[i][5].ToString()),
                    new Temperature(float.Parse(ds.Tables[0].Rows[i][9].ToString())),
-                   new Humidity(float.Parse(ds.Tables[0].Rows[i][6].ToString())),
-                   new Light(Int32.Parse(ds.Tables[0].Rows[i][12].ToString()),
-                   arduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][13].ToString())))
+                   new Humidity(float.Parse(ds.Tables[0].Rows[i][7].ToString())),
+                   new Light(Int32.Parse(ds.Tables[0].Rows[i][11].ToString()),
+                   arduinoManager.ConvertStringToBoolean(ds.Tables[0].Rows[i][12].ToString())))
                         );
                 }
 
