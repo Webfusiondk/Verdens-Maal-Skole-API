@@ -12,7 +12,7 @@ namespace Verdens_Maal_Skole
         public Temperature Temperature { get; set; }
         public Humidity Humidity { get; set; }
         public Light Light { get; set; }
-        public ReaderData(string roomNumber,DateTime time ,Temperature temperature, Humidity humidity, Light light)
+        public ReaderData(string roomNumber, DateTime time, Temperature temperature, Humidity humidity, Light light)
         {
             RoomNumber = roomNumber;
             Time = time;
