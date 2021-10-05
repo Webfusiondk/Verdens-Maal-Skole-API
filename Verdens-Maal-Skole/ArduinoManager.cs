@@ -14,33 +14,55 @@ namespace Verdens_Maal_Skole
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
-
+        
 
         /// <summary>
-        /// Returns a boolean based off of a given string
+        /// Starts timer that runs repeating events
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public bool ConvertStringToBoolean(string data)
+        public void StartEventTimer()
         {
-            if (data == "1")
-            {
-                return true;
-            }
-            else
-                return false;
+            aTimer = new Timer();
+            aTimer.Interval = 2000;
+
+            // Hook up the Elapsed event for the timer. 
+            aTimer.Elapsed += OnTimedEvent;
+
+            // Have the timer fire repeated events (true is the default)
+            aTimer.AutoReset = true;
+
+            // Start the timer
+            aTimer.Enabled = true;
         }
 
 
         /// <summary>
-        /// Returns a DateTime converted from a given string
+        /// Event that runs everytime the timer has elapsed
         /// </summary>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        public DateTime SplitStringToDateTime(string date)
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            DateTime time = DateTime.Parse(date);
-            return time;
+            try
+            {
+                //Checks if the task is done before starting new
+                if (isDone == true)
+                {
+                    isDone = false;
+
+                    Task<string[]> task = GetArdDataAsync();
+
+                    if (task.Result.Length == 3)
+                    {
+                        DataAccess.PostToDatabase(ConvertStringArrayToFloatArray(task));
+                    }
+
+                    isDone = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+            }
         }
 
 
@@ -72,29 +94,31 @@ namespace Verdens_Maal_Skole
         }
 
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        /// <summary>
+        /// Returns a boolean based off of a given string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool ConvertStringToBoolean(string data)
         {
-            try
+            if (data == "1")
             {
-                //Checks if the task is done before starting new
-                if (isDone == true)
-                {
-                    isDone = false;
-
-                    Task<string[]> task = GetArdDataAsync();
-
-                    if (task.Result.Length == 3)
-                    {
-                        DataAccess.PostToDatabase(ConvertStringArrayToFloatArray(task));
-                    }
-
-                    isDone = true;
-                }
+                return true;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR: " + ex.Message);
-            }
+            else
+                return false;
+        }
+
+
+        /// <summary>
+        /// Returns a DateTime converted from a given string
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public DateTime SplitStringToDateTime(string date)
+        {
+            DateTime time = DateTime.Parse(date);
+            return time;
         }
 
 
@@ -113,22 +137,6 @@ namespace Verdens_Maal_Skole
                 temp[i] = float.Parse(data.Result[i], ci);
             }
             return temp;
-        }
-
-
-        public void StartEventTimer()
-        {
-            aTimer = new Timer();
-            aTimer.Interval = 2000;
-
-            // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += OnTimedEvent;
-
-            // Have the timer fire repeated events (true is the default)
-            aTimer.AutoReset = true;
-
-            // Start the timer
-            aTimer.Enabled = true;
         }
 
 
