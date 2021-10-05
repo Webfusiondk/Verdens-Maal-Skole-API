@@ -4,12 +4,12 @@ using System.IO;
 
 namespace Verdens_Maal_Skole
 {
-    public class FileAccess
+    public static class FileAccess
     {
-        string conStringPath = Environment.CurrentDirectory + "\\DatabaseConnection.txt";
+        static string conStringPath = Environment.CurrentDirectory + "\\DatabaseConnection.txt";
 
 
-        public string ReadConnectionString()
+        public static string ReadConnectionString()
         {
             List<string> result = new List<string>();
             string line = string.Empty;

@@ -12,8 +12,7 @@ namespace Verdens_Maal_Skole
 
         private static string GetConnectionString()
         {
-            FileAccess fileAccess = new FileAccess();
-            return fileAccess.ReadConnectionString();
+            return FileAccess.ReadConnectionString();
         }
 
 
