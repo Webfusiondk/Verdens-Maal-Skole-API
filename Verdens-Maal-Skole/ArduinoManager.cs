@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -116,7 +115,29 @@ namespace Verdens_Maal_Skole
 
         public List<ReaderData> GetAllReaders()
         {
-             return DataAccess.GetAllReaders();
+            try
+            {
+                DataSet dataSet = DataAccess.GetAllReaders();
+                int i = 0;
+                List<ReaderData> dataList = new List<ReaderData>();
+
+                for (i = 0; i <= dataSet.Tables[0].Rows.Count - 1; i++)
+                {
+                    dataList.Add(new ReaderData(dataSet.Tables[0].Rows[i][1].ToString(),
+                        SplitStringToDateTime(dataSet.Tables[0].Rows[i][5].ToString()),
+                        new Temperature(float.Parse(dataSet.Tables[0].Rows[i][8].ToString())),
+                        new Humidity(float.Parse(dataSet.Tables[0].Rows[i][10].ToString())),
+                        new Light(Int32.Parse(dataSet.Tables[0].Rows[i][12].ToString()),
+                        ConvertStringToBoolean(dataSet.Tables[0].Rows[i][13].ToString()))));
+                }
+
+                return dataList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
 
@@ -128,7 +149,30 @@ namespace Verdens_Maal_Skole
 
         public List<ReaderData> GetDataFromRoom(string roomNr)
         {
-            return DataAccess.GetDataFromRoom(roomNr);
+            try
+            {
+                DataSet dataSet = DataAccess.GetDataFromRoom(roomNr);
+                int i = 0;
+                List<ReaderData> dataList = new List<ReaderData>();
+
+                for (i = 0; i <= dataSet.Tables[0].Rows.Count - 1; i++)
+                {
+                    dataList.Add(new ReaderData(roomNr,
+                   SplitStringToDateTime(dataSet.Tables[0].Rows[i][5].ToString()),
+                   new Temperature(float.Parse(dataSet.Tables[0].Rows[i][9].ToString())),
+                   new Humidity(float.Parse(dataSet.Tables[0].Rows[i][7].ToString())),
+                   new Light(Int32.Parse(dataSet.Tables[0].Rows[i][11].ToString()),
+                   ConvertStringToBoolean(dataSet.Tables[0].Rows[i][12].ToString())))
+                        );
+                }
+
+                return dataList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            } 
         }
 
     }
