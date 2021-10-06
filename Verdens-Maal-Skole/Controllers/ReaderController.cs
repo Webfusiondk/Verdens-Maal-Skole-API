@@ -9,16 +9,6 @@ namespace Verdens_Maal_Skole.Controllers
     {
         ArduinoManager manager = new ArduinoManager();
 
-        [HttpPost("providereading")]
-        public async Task<ActionResult> ProvideReading(string data)
-        {
-
-
-
-            return StatusCode(200);
-        }
-
-
         //Get all reader data
         [HttpGet("all")]
         public IActionResult GetAllData()
