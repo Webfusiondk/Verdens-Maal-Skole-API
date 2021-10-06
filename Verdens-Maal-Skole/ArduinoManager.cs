@@ -14,82 +14,115 @@ namespace Verdens_Maal_Skole
         static bool isDone = true;
         private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
-        
-
-        /// <summary>
-        /// Starts timer that runs repeating events
-        /// </summary>
-        public void StartEventTimer()
-        {
-            aTimer = new Timer();
-            aTimer.Interval = 2000;
-
-            // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += OnTimedEvent;
-
-            // Have the timer fire repeated events (true is the default)
-            aTimer.AutoReset = true;
-
-            // Start the timer
-            aTimer.Enabled = true;
-        }
 
 
-        /// <summary>
-        /// Event that runs everytime the timer has elapsed
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        ///// <summary>
+        ///// Starts timer that runs repeating events
+        ///// </summary>
+        //public void StartEventTimer()
+        //{
+        //    aTimer = new Timer();
+        //    aTimer.Interval = 2000;
+
+        //    // Hook up the Elapsed event for the timer. 
+        //    aTimer.Elapsed += OnTimedEvent;
+
+        //    // Have the timer fire repeated events (true is the default)
+        //    aTimer.AutoReset = true;
+
+        //    // Start the timer
+        //    aTimer.Enabled = true;
+        //}
+
+
+        ///// <summary>
+        ///// Event that runs everytime the timer has elapsed
+        ///// </summary>
+        ///// <param name="source"></param>
+        ///// <param name="e"></param>
+        //private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        //Checks if the task is done before starting new
+        //        if (isDone == true)
+        //        {
+        //            isDone = false;
+
+        //            Task<string[]> task = GetArdDataAsync();
+
+        //            if (task.Result.Length == 3)
+        //            {
+        //                DataAccess.PostToDatabase(ConvertStringArrayToFloatArray(task));
+        //            }
+
+        //            isDone = true;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("ERROR: " + ex.Message);
+        //    }
+        //}
+
+
+        ///// <summary>
+        ///// Returns arduino sensor data as string array
+        ///// </summary>
+        ///// <returns></returns>
+        //public async Task<string[]> GetArdDataAsync()
+        //{
+        //    try
+        //    {
+        //        //Sending http request to website
+        //        HttpResponseMessage respons = await _client.GetAsync(@"http://192.168.1.132/"); //MAKE SURE TO CHECK FOR UPDATED ARDUINO IP
+        //        respons.EnsureSuccessStatusCode();
+        //        //Reading the response from website
+        //        string responsBody = await respons.Content.ReadAsStringAsync();
+
+        //        //Writing the response and replacing all HTML to text "Removed"
+        //        string regString = Regex.Replace(responsBody, "<[^>]*>", "Removed");
+
+        //    }
+        //    catch (HttpRequestException ex)
+        //    {
+        //        Console.WriteLine("ERROR: " + ex.Message);
+        //        throw;
+        //    }
+        //}
+
+
+        public bool SaveArduinoData(string data)
         {
             try
             {
-                //Checks if the task is done before starting new
-                if (isDone == true)
-                {
-                    isDone = false;
+                string[] dataArray = splitString(data);
 
-                    Task<string[]> task = GetArdDataAsync();
-
-                    if (task.Result.Length == 3)
-                    {
-                        DataAccess.PostToDatabase(ConvertStringArrayToFloatArray(task));
-                    }
-
-                    isDone = true;
-                }
+                DataAccess.PostToDatabase(ConvertStringArrayToFloatArray(dataArray));
+                return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR: " + ex.Message);
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
 
 
-        /// <summary>
-        /// Returns arduino sensor data as string array
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string[]> GetArdDataAsync()
+        private string[] splitString(string data)
         {
             try
             {
-                //Sending http request to website
-                HttpResponseMessage respons = await _client.GetAsync(@"http://192.168.1.132/"); //MAKE SURE TO CHECK FOR UPDATED ARDUINO IP
-                respons.EnsureSuccessStatusCode();
-                //Reading the response from website
-                string responsBody = await respons.Content.ReadAsStringAsync();
+                ////Spliting the string at ';'
+                string[] tempValues = data.Split(";");
 
-                //Writing the response and replacing all HTML to text "Removed"
-                string regString = Regex.Replace(responsBody, "<[^>]*>", "Removed");
-                //Spliting the string at ';'
-                string[] tempValues = regString.Split(";");
                 return tempValues;
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine("ERROR: " + ex.Message);
-                throw;
+                Console.WriteLine(ex.Message);
+                string[] bruh = new string[0];
+                return bruh;
             }
         }
 
@@ -99,7 +132,7 @@ namespace Verdens_Maal_Skole
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public bool ConvertStringToBoolean(string data)
+        private bool ConvertStringToBoolean(string data)
         {
             if (data == "1")
             {
@@ -115,7 +148,7 @@ namespace Verdens_Maal_Skole
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public DateTime SplitStringToDateTime(string date)
+        private DateTime SplitStringToDateTime(string date)
         {
             DateTime time = DateTime.Parse(date);
             return time;
@@ -127,15 +160,16 @@ namespace Verdens_Maal_Skole
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public float[] ConvertStringArrayToFloatArray(Task<string[]> data)
+        private float[] ConvertStringArrayToFloatArray(string[] data)
         {
             var ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
             ci.NumberFormat.NumberDecimalSeparator = ".";
             float[] temp = new float[3];
-            for (int i = 0; i < data.Result.Length; i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                temp[i] = float.Parse(data.Result[i], ci);
+                temp[i] = float.Parse(data[i], ci);
             }
+
             return temp;
         }
 
@@ -212,7 +246,7 @@ namespace Verdens_Maal_Skole
             {
                 Console.WriteLine(ex.Message);
                 return null;
-            } 
+            }
         }
 
     }

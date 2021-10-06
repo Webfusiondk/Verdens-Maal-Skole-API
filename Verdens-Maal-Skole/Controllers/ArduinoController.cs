@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace Verdens_Maal_Skole.Controllers
 {
-    public class ArduinoController : ApiController
+    [Route("arduino")]
+    [ApiController]
+    public class ArduinoController : ControllerBase
     {
+        ArduinoManager manager = new ArduinoManager();
 
         [HttpPost]
-        public string ProvideReading(string data)
+        public IActionResult ProvideReading(string data)
         {
-
-            System.Console.WriteLine(data);
-            System.Console.WriteLine("Got a ProvideReading Post");
-            return data;
+            System.Console.WriteLine("HttpPost Data: " + data);
+            return Ok(manager.SaveArduinoData(data));
         }
 
     }
