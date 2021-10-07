@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Verdens_Maal_Skole.Attributes;
 
 namespace Verdens_Maal_Skole.Controllers
 {
     [Route("data")]
     [ApiController]
+    [ApiKey]
     public class ReaderController : Controller
     {
         ArduinoManager manager = new ArduinoManager();
