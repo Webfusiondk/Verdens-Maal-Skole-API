@@ -11,7 +11,7 @@ namespace Verdens_Maal_Skole.Controllers
     {
         ArduinoManager manager = new ArduinoManager();
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult ProvideReading(string data)
         {
             System.Console.WriteLine("HttpPost Data: " + data);

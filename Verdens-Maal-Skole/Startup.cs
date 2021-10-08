@@ -43,7 +43,7 @@ namespace Verdens_Maal_Skole
            .AllowAnyMethod()
            .AllowAnyHeader());
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
