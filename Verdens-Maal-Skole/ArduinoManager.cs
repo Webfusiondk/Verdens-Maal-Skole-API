@@ -11,8 +11,6 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static bool isDone = true;
-        private static Timer aTimer;
         static readonly HttpClient _client = new HttpClient();
 
 
