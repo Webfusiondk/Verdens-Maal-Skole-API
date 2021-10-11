@@ -1,1 +1,0 @@
-Server = ZBC-EMA-UDL2310; Database = ArduinoDB; Trusted_Connection=True;
