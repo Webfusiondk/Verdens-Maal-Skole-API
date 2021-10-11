@@ -170,5 +170,69 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Runs a stored procedure that deletes outdated session Tokens
+        /// </summary>
+        public static void RemoveOldSessionTokens()
+        {
+            try
+            {
+                SqlConnection connection;
+                SqlDataAdapter adapter;
+                SqlCommand command = new SqlCommand();
+
+                connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                command.Connection = connection;
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "spDeleteOldSessionTokens";
+
+                adapter = new SqlDataAdapter(command);
+
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Updates a users session token in the database
+        /// </summary>
+        public static void UpdateSessionToken(string token)
+        {
+            try
+            {
+                SqlConnection connection;
+                SqlDataAdapter adapter;
+                SqlCommand command = new SqlCommand();
+                SqlParameter param;
+
+                connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                command.Connection = connection;
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "spUpdateSessionToken";
+
+                param = new SqlParameter("@token", token);
+                param.Direction = ParameterDirection.Input;
+                param.DbType = DbType.String;
+                command.Parameters.Add(param);
+
+                adapter = new SqlDataAdapter(command);
+                
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
     }
 }

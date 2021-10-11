@@ -8,7 +8,6 @@ namespace Verdens_Maal_Skole
         static ArduinoManager manager = new ArduinoManager();
         public static void Main(string[] args)
         {
-            //manager.StartEventTimer();
             CreateHostBuilder(args).Build().Run();
         }
 
