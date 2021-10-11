@@ -35,7 +35,7 @@ namespace Verdens_Maal_Skole
         {
             try
             {
-                ////Spliting the string at ';'
+                //Spliting the string at ';'
                 string[] tempValues = data.Split(";");
 
                 return tempValues;
