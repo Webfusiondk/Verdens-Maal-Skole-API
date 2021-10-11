@@ -198,6 +198,32 @@ namespace Verdens_Maal_Skole
             }
         }
 
+        public static void CreateToken(string token)
+        {
+            try
+            {
+                SqlConnection connection;
+                SqlCommand command = new SqlCommand();
+
+                connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "insert into SessionTokens(Token) VALUES(@token)";
+
+                command.Parameters.AddWithValue(@"@token", token);
+
+                command.ExecuteNonQuery();
+
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+        }
+
 
         /// <summary>
         /// Updates a users session token in the database
