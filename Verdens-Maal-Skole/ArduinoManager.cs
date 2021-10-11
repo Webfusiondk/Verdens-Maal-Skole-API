@@ -41,8 +41,7 @@ namespace Verdens_Maal_Skole
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                string[] bruh = new string[0];
-                return bruh;
+                return null;
             }
         }
 
