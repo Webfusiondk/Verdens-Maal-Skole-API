@@ -197,6 +197,11 @@ namespace Verdens_Maal_Skole
             }
         }
 
+
+        /// <summary>
+        /// Inserts a new session token into the database table
+        /// </summary>
+        /// <param name="token"></param>
         public static void PostToken(string token)
         {
             try
