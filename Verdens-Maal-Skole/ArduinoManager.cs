@@ -11,8 +11,6 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-        static readonly HttpClient _client = new HttpClient();
-
 
         public bool SaveArduinoData(string data)
         {
