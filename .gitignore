@@ -361,4 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+#Database Connection file
 Verdens-Maal-Skole/DatabaseConnection.txt
