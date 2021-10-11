@@ -178,7 +178,6 @@ namespace Verdens_Maal_Skole
             try
             {
                 SqlConnection connection;
-                SqlDataAdapter adapter;
                 SqlCommand command = new SqlCommand();
 
                 connection = new SqlConnection(connectionString);
@@ -188,7 +187,7 @@ namespace Verdens_Maal_Skole
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandText = "spDeleteOldSessionTokens";
 
-                adapter = new SqlDataAdapter(command);
+                command.ExecuteNonQuery();
 
                 connection.Close();
             }
@@ -198,7 +197,7 @@ namespace Verdens_Maal_Skole
             }
         }
 
-        public static void CreateToken(string token)
+        public static void PostToken(string token)
         {
             try
             {
@@ -228,12 +227,12 @@ namespace Verdens_Maal_Skole
         /// <summary>
         /// Updates a users session token in the database
         /// </summary>
-        public static void UpdateSessionToken(string token)
+        public static int UpdateSessionToken(string token)
         {
+            RemoveOldSessionTokens();
             try
             {
                 SqlConnection connection;
-                SqlDataAdapter adapter;
                 SqlCommand command = new SqlCommand();
                 SqlParameter param;
 
@@ -249,14 +248,16 @@ namespace Verdens_Maal_Skole
                 param.DbType = DbType.String;
                 command.Parameters.Add(param);
 
-                adapter = new SqlDataAdapter(command);
+                int resault = command.ExecuteNonQuery();
                 
                 connection.Close();
+                return resault;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            return 0;
         }
 
 

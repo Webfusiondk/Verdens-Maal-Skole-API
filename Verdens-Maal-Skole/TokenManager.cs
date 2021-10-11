@@ -9,7 +9,7 @@ namespace Verdens_Maal_Skole
     public class TokenManager
     {
 
-        public string GenerateToken()
+        public SessionToken GenerateToken()
         {
             string token = "";
             for (int i = 0; i < 5; i++)
@@ -17,13 +17,13 @@ namespace Verdens_Maal_Skole
                 token += Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             }
             token = Regex.Replace(token, @"[^0-9a-zA-Z]+", "");
-            DataAccess.CreateToken(token);
-            return token;
+            DataAccess.PostToken(token);
+            return new SessionToken(token);
         }
 
-        public void UpdateToken(string token)
+        public int UpdateToken(string token)
         {
-            DataAccess.UpdateSessionToken(token);
+            return DataAccess.UpdateSessionToken(token);
         }
     }
 }
