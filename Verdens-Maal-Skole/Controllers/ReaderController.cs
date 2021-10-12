@@ -11,7 +11,10 @@ namespace Verdens_Maal_Skole.Controllers
     {
         ArduinoManager manager = new ArduinoManager();
 
-        //Get all reader data
+        /// <summary>
+        /// Get all reader data
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("all")]
         public IActionResult GetAllData()
         {
@@ -19,7 +22,10 @@ namespace Verdens_Maal_Skole.Controllers
         }
 
 
-        //Get all room numbers
+        /// <summary>
+        /// Get all room numbers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("rooms")]
         public IActionResult GetAllRooms()
         {
@@ -27,7 +33,11 @@ namespace Verdens_Maal_Skole.Controllers
         }
 
 
-        //Get all reader data by room nr
+        /// <summary>
+        /// Get all reader data by room nr
+        /// </summary>
+        /// <param name="roomNr"></param>
+        /// <returns></returns>
         [HttpGet("room")]
         public IActionResult GetAllDataByRoomNr(string roomNr)
         {

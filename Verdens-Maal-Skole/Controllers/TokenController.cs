@@ -14,12 +14,22 @@ namespace Verdens_Maal_Skole.Controllers
     public class TokenController : ControllerBase
     {
         TokenManager tokenManager = new TokenManager();
+
+        /// <summary>
+        /// Sends a freshly generated token to the user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetToken")]
         public IActionResult GetToken()
         {
             return Ok(tokenManager.GenerateToken());
         }
-            
+         
+        /// <summary>
+        /// Updates a users session token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost("Update")]
         public IActionResult UpdateSession(string token)
         {

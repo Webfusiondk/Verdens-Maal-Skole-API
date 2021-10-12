@@ -11,6 +11,11 @@ namespace Verdens_Maal_Skole.Controllers
     {
         ArduinoManager manager = new ArduinoManager();
 
+        /// <summary>
+        /// Receives http data from arduino
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult ProvideReading(string data)
         {
