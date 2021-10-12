@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -24,9 +25,6 @@ namespace Verdens_Maal_Skole
             DataAccess.PostToken(token);
             return new SessionToken(token);
         }
-        public int ValidateToken(SessionToken token)
-        {
-        }
 
         /// <summary>
         /// Updates a valid token's expiration time
@@ -45,14 +43,14 @@ namespace Verdens_Maal_Skole
         /// <returns></returns>
         public bool CheckForToken(string token)
         {
-            if(DataAccess.SelectToken(token) != null)
+            foreach (DataTable table in DataAccess.SelectToken(token).Tables)
             {
-                return true;
+                if (table.Rows.Count == 1)
+                {
+                    return true;
+                }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

@@ -23,8 +23,7 @@ namespace Verdens_Maal_Skole.Controllers
         [HttpGet("Validate")]
         public IActionResult ValidateSession(string token)
         {
-            SessionToken sessionToken = new SessionToken(token);
-            return Ok(tokenManager.ValidateToken(sessionToken));
+            return Ok(tokenManager.CheckForToken(token));
         }
             
         [HttpPost("Update")]

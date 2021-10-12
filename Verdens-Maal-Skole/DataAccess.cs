@@ -295,7 +295,7 @@ namespace Verdens_Maal_Skole
                 command.Parameters.Add(param);
 
                 int resault = command.ExecuteNonQuery();
-                
+
                 connection.Close();
                 return resault;
             }
