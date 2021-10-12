@@ -20,6 +20,9 @@ namespace Verdens_Maal_Skole
             DataAccess.PostToken(token);
             return new SessionToken(token);
         }
+        public int ValidateToken(SessionToken token)
+        {
+        }
 
         public int UpdateToken(string token)
         {

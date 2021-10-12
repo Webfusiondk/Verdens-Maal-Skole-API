@@ -19,6 +19,13 @@ namespace Verdens_Maal_Skole.Controllers
         {
             return Ok(tokenManager.GenerateToken());
         }
+
+        [HttpGet("Validate")]
+        public IActionResult ValidateSession(string token)
+        {
+            SessionToken sessionToken = new SessionToken(token);
+            return Ok(tokenManager.ValidateToken(sessionToken));
+        }
             
         [HttpPost("Update")]
         public IActionResult UpdateSession(string token)
