@@ -169,6 +169,47 @@ namespace Verdens_Maal_Skole
             }
         }
 
+        /// <summary>
+        /// Returns a token that matches given token string
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static DataSet SelectToken(string token)
+        {
+            try
+            {
+                SqlConnection connection;
+                SqlDataAdapter adapter;
+                SqlCommand command = new SqlCommand();
+                SqlParameter param;
+                DataSet data = new DataSet();
+
+                connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                command.Connection = connection;
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "spSelectToken";
+
+                param = new SqlParameter("@token", token);
+                param.Direction = ParameterDirection.Input;
+                param.DbType = DbType.String;
+                command.Parameters.Add(param);
+
+                adapter = new SqlDataAdapter(command);
+                adapter.Fill(data);
+
+                connection.Close();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// Runs a stored procedure that deletes outdated session Tokens
@@ -197,6 +238,11 @@ namespace Verdens_Maal_Skole
             }
         }
 
+
+        /// <summary>
+        /// Inserts a new session token into the database table
+        /// </summary>
+        /// <param name="token"></param>
         public static void PostToken(string token)
         {
             try
