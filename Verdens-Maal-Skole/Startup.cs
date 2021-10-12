@@ -1,15 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Verdens_Maal_Skole
 {
@@ -26,6 +19,20 @@ namespace Verdens_Maal_Skole
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins",
+                    builder =>
+                    {
+                        builder.WithOrigins(
+                            "http://localhost:4200",
+                            "http://localhost:5001")
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                                
+                    });
+            });
+
             services.AddControllers();
         }
 
@@ -37,13 +44,7 @@ namespace Verdens_Maal_Skole
                 app.UseDeveloperExceptionPage();
             }
 
-            //Allowing anyone to call the api. This is not good for security
-            app.UseCors(x => x
-           .AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader());
-
-            //app.UseHttpsRedirection();
+            app.UseCors();
 
             app.UseRouting();
 
