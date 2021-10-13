@@ -215,34 +215,6 @@ namespace Verdens_Maal_Skole
 
 
         /// <summary>
-        /// Runs a stored procedure that deletes outdated session Tokens
-        /// </summary>
-        public static void RemoveOldSessionTokens()
-        {
-            try
-            {
-                SqlConnection connection;
-                SqlCommand command = new SqlCommand();
-
-                connection = new SqlConnection(connectionString);
-
-                connection.Open();
-                command.Connection = connection;
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandText = "spDeleteOldSessionTokens";
-
-                command.ExecuteNonQuery();
-
-                connection.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-
-        /// <summary>
         /// Inserts a new session token into the database table
         /// </summary>
         /// <param name="token"></param>
@@ -307,6 +279,34 @@ namespace Verdens_Maal_Skole
                 Console.WriteLine(ex.Message);
             }
             return 0;
+        }
+
+
+        /// <summary>
+        /// Runs a stored procedure that deletes outdated session Tokens
+        /// </summary>
+        private static void RemoveOldSessionTokens()
+        {
+            try
+            {
+                SqlConnection connection;
+                SqlCommand command = new SqlCommand();
+
+                connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                command.Connection = connection;
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "spDeleteOldSessionTokens";
+
+                command.ExecuteNonQuery();
+
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
 
