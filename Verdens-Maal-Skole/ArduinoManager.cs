@@ -11,7 +11,11 @@ namespace Verdens_Maal_Skole
 {
     public class ArduinoManager
     {
-
+        /// <summary>
+        /// Sends data to the database
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public bool SaveArduinoData(string data)
         {
             try
@@ -29,6 +33,11 @@ namespace Verdens_Maal_Skole
         }
 
 
+        /// <summary>
+        /// Splits a string on every semicolon
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private string[] splitString(string data)
         {
             try
