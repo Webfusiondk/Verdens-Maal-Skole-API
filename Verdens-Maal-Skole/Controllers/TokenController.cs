@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Verdens_Maal_Skole.Attributes;
 
 namespace Verdens_Maal_Skole.Controllers
 {
-    [EnableCors("AllowSpecificOrigins")]
     [Route("token")]
     [ApiController]
     [ApiKey]
