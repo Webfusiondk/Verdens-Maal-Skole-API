@@ -8,6 +8,8 @@ namespace Verdens_Maal_Skole
     public static class DataAccess
     {
         static string connectionString = GetConnectionString(); //Make sure the file has YOUR connectionstring
+        private static List<string> AllRooms = GetAllRoomNumbers();
+        static Random random = new Random();
 
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace Verdens_Maal_Skole
         {
             try
             {
+                string roomnum = AllRooms[random.Next(AllRooms.Count)];
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -36,7 +39,7 @@ namespace Verdens_Maal_Skole
                     {
                         cmd.CommandText = @"EXEC spInsertSensorData @roomNr, @temperature, @humidity, @light";
 
-                        cmd.Parameters.AddWithValue(@"@roomNr", "B.16");
+                        cmd.Parameters.AddWithValue(@"@roomNr", roomnum);
                         cmd.Parameters.AddWithValue(@"@temperature", array[0]);
                         cmd.Parameters.AddWithValue(@"humidity", array[1]);
                         cmd.Parameters.AddWithValue(@"light", array[2]);
