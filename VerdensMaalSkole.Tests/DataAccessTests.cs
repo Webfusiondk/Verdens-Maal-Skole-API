@@ -22,5 +22,6 @@ namespace VerdensMaalSkole.Tests
             //Assert
             Assert.Equal(expected, actual);
         }
+
     }
 }
