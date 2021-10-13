@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Timers;
 
 namespace Verdens_Maal_Skole
 {

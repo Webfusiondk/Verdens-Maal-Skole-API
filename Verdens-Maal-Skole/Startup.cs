@@ -29,6 +29,11 @@ namespace Verdens_Maal_Skole
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
             app.UseRouting();
 
             app.UseAuthorization();
