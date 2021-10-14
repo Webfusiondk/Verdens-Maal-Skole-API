@@ -10,10 +10,9 @@ namespace VerdensMaalSkole.Tests
         {
             //Arrange
             bool expected = true;
-
-            //Act
             bool actual = false;
 
+            //Act
             if (DataAccess.GetAllData() != null)
             {
                 actual = true;
