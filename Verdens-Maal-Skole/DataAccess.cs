@@ -8,9 +8,6 @@ namespace Verdens_Maal_Skole
     public static class DataAccess
     {
         static string connectionString = GetConnectionString(); //Make sure the file has YOUR connectionstring
-        private static List<string> AllRooms = GetAllRoomNumbers();
-        static Random random = new Random();
-
 
         /// <summary>
         /// Returns a connectionstring
@@ -30,7 +27,12 @@ namespace Verdens_Maal_Skole
         {
             try
             {
+                List<string> AllRooms = GetAllRoomNumbers();
+                Random random = new Random();
+
+                //Sets a random room
                 string roomnum = AllRooms[random.Next(AllRooms.Count)];
+
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -145,6 +147,7 @@ namespace Verdens_Maal_Skole
             try
             {
                 List<string> listOfRooms = new List<string>();
+
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -157,7 +160,6 @@ namespace Verdens_Maal_Skole
                         while (reader.Read())
                         {
                             listOfRooms.Add(reader["RoomNr"].ToString());
-
                         }
                     }
 
@@ -171,6 +173,7 @@ namespace Verdens_Maal_Skole
                 return null;
             }
         }
+
 
         /// <summary>
         /// Returns a token that matches given token string
@@ -269,10 +272,10 @@ namespace Verdens_Maal_Skole
                 param.DbType = DbType.String;
                 command.Parameters.Add(param);
 
-                int resault = command.ExecuteNonQuery();
+                int result = command.ExecuteNonQuery();
 
                 connection.Close();
-                return resault;
+                return result;
             }
             catch (Exception ex)
             {
@@ -308,7 +311,5 @@ namespace Verdens_Maal_Skole
                 Console.WriteLine(ex.Message);
             }
         }
-
-
     }
 }
