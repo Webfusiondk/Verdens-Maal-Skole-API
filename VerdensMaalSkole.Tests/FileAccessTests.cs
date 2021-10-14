@@ -6,7 +6,7 @@ namespace VerdensMaalSkole.Tests
     public class FileAccessTests
     {
         [Fact]
-        public void ReadConnectionString_ShouldReturnString()
+        public void ReadConnectionString_ShouldReadAndReturnString()
         {
             //Arrange
 
