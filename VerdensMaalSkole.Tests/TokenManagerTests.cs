@@ -35,6 +35,24 @@ namespace VerdensMaalSkole.Tests
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void CheckForToken_ShouldFindNewToken()
+        {
+            //Arrange
+            bool expected = true;
+            bool actual = false;
+            SessionToken testToken = TokenManager.GenerateToken();
+
+            //Act
+            if (TokenManager.CheckForToken(testToken.Token))
+            {
+                actual = true;
+            }
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
 
     }
 }
