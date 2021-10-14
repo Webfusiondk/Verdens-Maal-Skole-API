@@ -21,6 +21,11 @@ namespace Verdens_Maal_Skole.Controllers
         }
 
 
+        /// <summary>
+        /// Gets a token from client to validate active session
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpGet("Validate")]
         public IActionResult ValidateSession(string token)
         

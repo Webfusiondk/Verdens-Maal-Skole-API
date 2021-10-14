@@ -160,8 +160,7 @@ namespace Verdens_Maal_Skole
                    new Temperature(float.Parse(dataSet.Tables[0].Rows[i][9].ToString())),
                    new Humidity(float.Parse(dataSet.Tables[0].Rows[i][7].ToString())),
                    new Light(Int32.Parse(dataSet.Tables[0].Rows[i][11].ToString()),
-                   ConvertStringToBoolean(dataSet.Tables[0].Rows[i][12].ToString())))
-                        );
+                   ConvertStringToBoolean(dataSet.Tables[0].Rows[i][12].ToString()))));
                 }
 
                 return dataList;
