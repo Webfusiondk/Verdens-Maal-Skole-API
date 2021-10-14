@@ -11,12 +11,12 @@ namespace Verdens_Maal_Skole.Attributes
     [AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiKeyAttribute : Attribute, IAsyncActionFilter
     {
-        private const string APIKEYNAME = "ApiKey";
+        private const string apiKeyName = "ApiKey";
 
         //This is used to authorize the request before hitting the controller
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!context.HttpContext.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
+            if (!context.HttpContext.Request.Headers.TryGetValue(apiKeyName, out var extractedApiKey))
             {
                 context.Result = new ContentResult()
                 {
@@ -29,7 +29,7 @@ namespace Verdens_Maal_Skole.Attributes
             //Dependency inject to the appsettings
             var appSettings = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
             //Getting the key from appsettings
-            var apiKey = appSettings.GetValue<string>(APIKEYNAME);
+            var apiKey = appSettings.GetValue<string>(apiKeyName);
 
             if (!apiKey.Equals(extractedApiKey))
             {
