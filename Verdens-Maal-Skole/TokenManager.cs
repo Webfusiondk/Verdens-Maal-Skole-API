@@ -23,6 +23,7 @@ namespace Verdens_Maal_Skole
             return new SessionToken(token);
         }
 
+
         /// <summary>
         /// Updates a valid token's expiration time
         /// </summary>
@@ -32,6 +33,7 @@ namespace Verdens_Maal_Skole
         {
             return DataAccess.UpdateSessionToken(token);
         }
+
 
         /// <summary>
         /// Checks if a token already exists in the database
