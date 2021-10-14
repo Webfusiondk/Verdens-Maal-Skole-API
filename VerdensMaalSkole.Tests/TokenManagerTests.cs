@@ -25,9 +25,10 @@ namespace VerdensMaalSkole.Tests
 
             //Act
 
-            //Looks through list for duplicates and fails the test if any is found
+            //Looks through list for duplicates
             if (tokenList.Count != tokenList.Distinct().Count())
             {
+                //Fails the test if any duplicates are found
                 actual = false;
             }
 
@@ -35,24 +36,27 @@ namespace VerdensMaalSkole.Tests
             Assert.Equal(expected, actual);
         }
 
+
         [Fact]
         public void CheckForToken_ShouldFindNewToken()
         {
             //Arrange
             bool expected = true;
             bool actual = false;
+
+            //Generates a fresh new token to the database
             SessionToken testToken = TokenManager.GenerateToken();
 
             //Act
+                            //Runs check method on newly created sessiontoken
             if (TokenManager.CheckForToken(testToken.Token))
             {
+                //If found
                 actual = true;
             }
 
             //Assert
             Assert.Equal(expected, actual);
         }
-
-
     }
 }
